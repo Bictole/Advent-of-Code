@@ -106,3 +106,75 @@ lines = import_data()
 result = bingo(lines)
 print ("The Result of the first exercise is :",result)
 print()
+
+############### Second Exercise ###############    
+
+def bingo_bad(lines):
+    numbers = get_numbers(lines[0].split(','))
+    all_boards = get_boards(lines)
+    #print_all(all_boards)
+
+    win = False
+    final_board = []
+    number = 0
+
+    count = 0
+    while not win and count < len(numbers):
+        number = numbers[count]
+        for board in all_boards:
+            for i in range(len(board)):
+                for j in range(len(board[i])):
+                    if (board[i][j][0] == number):
+                        board[i][j] = (number, True)
+
+        b = 0
+        while b < len(all_boards):
+            win_row = True
+            for i in range(len(all_boards[b])):
+                win_row = True
+                for j in range(len(all_boards[b][i])):
+                    if (not all_boards[b][i][j][1]):
+                        win_row = False
+                        break
+                if win_row:
+                    break
+
+            win_col = True
+            for i in range(len(all_boards[b])):
+                win_col = True
+                for j in range(len(all_boards[b][i])):
+                    if (not all_boards[b][j][i][1]):
+                        win_col = False
+                        break
+                if win_col:
+                    break
+
+            if win_row or win_col:
+                if (len(all_boards) == 1):
+                    win = True
+                    final_board = all_boards[0]
+                    break
+                all_boards.pop(b)
+                b -= 1
+            
+            b += 1
+        
+        count += 1
+    
+    sum = 0
+
+    for i in range(len(final_board)):
+        for j in range(len(final_board[i])):
+            if not final_board[i][j][1]:
+                sum += final_board[i][j][0]
+
+    return sum * number
+
+lines = import_test()
+result = bingo_bad(lines)
+print ("\nThe Result of the second test is :", result)
+
+lines = import_data()
+result = bingo_bad(lines)
+print ("The Result of the second exercise is :",result)
+print()
